@@ -176,22 +176,6 @@
         "documentation": {}
     },
     {
-        "label": "HTTPException",
-        "importPath": "fastapi",
-        "description": "fastapi",
-        "isExtraImport": true,
-        "detail": "fastapi",
-        "documentation": {}
-    },
-    {
-        "label": "Request",
-        "importPath": "fastapi",
-        "description": "fastapi",
-        "isExtraImport": true,
-        "detail": "fastapi",
-        "documentation": {}
-    },
-    {
         "label": "create_payment_task",
         "importPath": "celery.create_payment_task",
         "description": "celery.create_payment_task",
@@ -428,7 +412,7 @@
         "kind": 5,
         "importPath": "app.main",
         "description": "app.main",
-        "peekOfCode": "app = FastAPI()\napp.include_router(create_payment_router)\napp.include_router(webhook_router)\n# Define the send_email_with_qr function\n# def send_email_with_qr(recipient_email, payment_id):\n#     MAILGUN_DOMAIN = \"HELLO\"\n#     MAILGUN_API_KEY = \"API KEY\"\n#     try:\n#         # Generate QR code with the payment ID as the data\n#         qr = qrcode.QRCode(",
+        "peekOfCode": "app = FastAPI()\napp.include_router(create_payment_router.route)\napp.include_router(webhook_router.route)\n# Define the send_email_with_qr function\n# def send_email_with_qr(recipient_email, payment_id):\n#     MAILGUN_DOMAIN = \"HELLO\"\n#     MAILGUN_API_KEY = \"API KEY\"\n#     try:\n#         # Generate QR code with the payment ID as the data\n#         qr = qrcode.QRCode(",
         "detail": "app.main",
         "documentation": {}
     }

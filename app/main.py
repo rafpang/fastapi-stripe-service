@@ -1,9 +1,4 @@
-from .request_model.request_models import PaymentRequest
-from .db.db_models import Payment
-from .celery.celery_init import celery
-from .db.db_init import SessionLocal
-
-from fastapi import FastAPI, HTTPException, Request
+from fastapi import FastAPI
 
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
@@ -11,15 +6,15 @@ from email.mime.image import MIMEImage
 import qrcode
 from PIL import Image
 from io import BytesIO
-from .stripe.stripe_init import stripe
+
 import requests
 
 from stripe.create_payment import router as create_payment_router
 from stripe.webhook import router as webhook_router
 
 app = FastAPI()
-app.include_router(create_payment_router)
-app.include_router(webhook_router)
+app.include_router(create_payment_router.route)
+app.include_router(webhook_router.route)
 
 # Define the send_email_with_qr function
 # def send_email_with_qr(recipient_email, payment_id):
