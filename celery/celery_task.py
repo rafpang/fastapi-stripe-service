@@ -4,7 +4,10 @@ from db.db_models import Payment
 
 
 @celery.task
-def process_successful_payment(payment_id, email):
+def process_successful_payment(
+    payment_id,
+    #    email)
+):
     try:
         # Update the database to reflect the successful payment
         db = SessionLocal()
