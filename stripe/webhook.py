@@ -1,12 +1,14 @@
 from celery.celery_task import process_successful_payment
-from fastapi import APIRouter, Request
-from stripe.stripe_init import stripe
+from .stripe_init import get_stripe_api_key
+
+from fastapi import APIRouter, Request, Depends
+
 
 router = APIRouter(prefix="/webhook")
 
 
 @router.post("/stripe-webhook")
-async def stripe_webhook(request: Request):
+async def stripe_webhook(request: Request, stripe=Depends(get_stripe_api_key)):
     try:
         event = await request.json()
         webhook_secret = "your_webhook_secret_key"
