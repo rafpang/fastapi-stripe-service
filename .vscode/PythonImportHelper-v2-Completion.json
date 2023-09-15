@@ -222,7 +222,7 @@
         "kind": 2,
         "importPath": "app.celery_and_tasks.create_payment_task",
         "description": "app.celery_and_tasks.create_payment_task",
-        "peekOfCode": "def create_payment_task(payment_request: PaymentRequest):\n    try:\n        stripe = get_stripe_instance()\n        session = stripe.checkout.Session.create(\n            payment_method_types=[\"card\"],\n            line_items=[\n                {\n                    \"price\": \"price_123\",\n                    \"quantity\": 1,\n                }",
+        "peekOfCode": "def create_payment_task(payment_request: PaymentRequest):\n    try:\n        stripe = get_stripe_instance()\n        session = stripe.checkout.Session.create(\n            payment_method_types=[\"card\", \"paynow\"],\n            line_items=[\n                {\n                    \"price\": \"price_123\",\n                    \"quantity\": 1,\n                }",
         "detail": "app.celery_and_tasks.create_payment_task",
         "documentation": {}
     },

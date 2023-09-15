@@ -11,7 +11,7 @@ def create_payment_task(payment_request: PaymentRequest):
     try:
         stripe = get_stripe_instance()
         session = stripe.checkout.Session.create(
-            payment_method_types=["card"],
+            payment_method_types=["card", "paynow"],
             line_items=[
                 {
                     "price": "price_123",
