@@ -1,4 +1,4 @@
-from .request_models import PaymentRequest
+from .request_model.request_models import PaymentRequest
 from .db.db_models import Payment
 from .celery.celery_init import celery
 from .db.db_init import SessionLocal
@@ -16,26 +16,6 @@ import requests
 
 
 app = FastAPI()
-
-
-@celery.task
-def process_successful_payment(payment_id, email):
-    try:
-        # Update the database to reflect the successful payment
-        db = SessionLocal()
-        db_payment = db.query(Payment).filter(Payment.id == payment_id).first()
-
-        if db_payment:
-            db_payment.status = "succeeded"
-            db.commit()
-            db.refresh(db_payment)
-
-            # Send email with QR code
-            # send_email_with_qr(email, payment_id)
-
-        return "Payment processed successfully"
-    except Exception as e:
-        return f"Payment Error: {str(e)}"
 
 
 # Define the send_email_with_qr function
@@ -92,58 +72,6 @@ def send_email_with_qr(recipient_email, payment_id):
             print("Email sending failed with status code:", response.status_code)
     except Exception as e:
         print("Email sending failed:", str(e))
-
-
-@app.post("/create-payment")
-def create_payment(payment_request: PaymentRequest):
-    try:
-        db = SessionLocal()
-        payment = Payment(
-            amount=payment_request.amount,
-            currency=payment_request.currency,
-            email=payment_request.email,
-            status="pending",
-        )
-        db.add(payment)
-        db.commit()
-        db.refresh(payment)
-        payment_id = payment.id
-
-        payment.status = "succeeded"
-        db.commit()
-
-        process_successful_payment.apply_async(args=[payment_id, payment_request.email])
-
-        return "Payment processing started asynchronously"
-    except Exception as e:
-        raise HTTPException(status_code=400, detail=f"Payment Error: {str(e)}")
-
-
-# Stripe webhook handling endpoint
-@app.post("/stripe-webhook")
-async def stripe_webhook(request: Request):
-    try:
-        event = await request.json()
-        webhook_secret = (
-            "your_webhook_secret_key"  # Replace with your webhook secret key
-        )
-
-        # Verify the webhook signature
-        stripe_event = stripe.Webhook.construct_event(
-            payload=event, secret=webhook_secret
-        )
-
-        if stripe_event.type == "payment_intent.succeeded":
-            payment_intent = stripe_event.data.object
-            payment_id = payment_intent.metadata.get("payment_id")
-            email = payment_intent.metadata.get("email")
-
-        # Enqueue the Celery task to process the successful payment
-        process_successful_payment.apply_async(args=[payment_id, email])
-
-        return "Webhook processed successfully"
-    except Exception as e:
-        return f"Webhook Error: {str(e)}"
 
 
 if __name__ == "__main__":
