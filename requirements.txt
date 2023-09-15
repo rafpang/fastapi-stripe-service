@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+celery
+sqlalchemy
+stripe
+requests
+Pillow
+qrcode
+python-decouple
