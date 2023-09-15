@@ -1,11 +1,21 @@
 version: "3.7"
 services:
   fastapi_app:
-    build: "./"
+    build: .
     ports:
-      - "80:80"
+      - "8000:8000"
     depends_on:
       - rabbit
+  celery-worker:
+    build: .
+    command:
+      [
+        "celery",
+        "-A",
+        "app.celery_and_tasks.celery_init",
+        "worker",
+        "--loglevel=info",
+      ]
 
   rabbit:
     hostname: rabbit
@@ -16,11 +26,3 @@ services:
     ports:
       - "15672:15672"
       - "5672:5672"
-
-  simple_worker:
-    build: "./simple_worker"
-    user: nobody
-    depends_on:
-      - rabbit
-      - flask_app
-      - mongodb_container
