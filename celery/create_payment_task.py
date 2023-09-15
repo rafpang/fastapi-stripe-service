@@ -3,13 +3,13 @@ from db.db_init import SessionLocal
 from db.db_models import Payment
 from db.db_init import SessionLocal
 from request_model import PaymentRequest
-from stripe.stripe_init import get_stripe_api_key
+from stripe.stripe_init import get_stripe_instance
 
 
 @celery.task
 def create_payment_task(payment_request: PaymentRequest):
     try:
-        stripe = get_stripe_api_key()
+        stripe = get_stripe_instance()
         session = stripe.checkout.Session.create(
             payment_method_types=["card"],
             line_items=[
