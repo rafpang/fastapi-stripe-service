@@ -16,6 +16,9 @@ services:
         "worker",
         "--loglevel=info",
       ]
+    depends_on:
+      - fastapi_app
+      - rabbit
 
   rabbit:
     hostname: rabbit
