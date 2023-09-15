@@ -1,8 +1,11 @@
-from fastapi import APIRouter, HTTPException, Depends
-from celery.create_payment_task import create_payment_task
-from request_model.request_models import PaymentRequest
+from fastapi import APIRouter, HTTPException
+from app.celery_and_tasks.create_payment_task import create_payment_task
 
-from celery.process_successful_payment_task import process_successful_payment
+from app.request_model.request_models import PaymentRequest
+
+from app.celery_and_tasks.process_successful_payment_task import (
+    process_successful_payment,
+)
 
 
 router = APIRouter(prefix="/payment")

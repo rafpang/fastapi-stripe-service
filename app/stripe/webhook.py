@@ -1,4 +1,6 @@
-from celery.process_successful_payment_task import process_successful_payment
+from app.celery_and_tasks.process_successful_payment_task import (
+    process_successful_payment,
+)
 from .stripe_init import get_stripe_instance
 
 from fastapi import APIRouter, Request, Depends

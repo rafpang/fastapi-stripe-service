@@ -9,58 +9,66 @@
     },
     {
         "label": "SessionLocal",
-        "importPath": "db.db_init",
-        "description": "db.db_init",
+        "importPath": "app.db.db_init",
+        "description": "app.db.db_init",
         "isExtraImport": true,
-        "detail": "db.db_init",
+        "detail": "app.db.db_init",
         "documentation": {}
     },
     {
         "label": "SessionLocal",
-        "importPath": "db.db_init",
-        "description": "db.db_init",
+        "importPath": "app.db.db_init",
+        "description": "app.db.db_init",
         "isExtraImport": true,
-        "detail": "db.db_init",
+        "detail": "app.db.db_init",
         "documentation": {}
     },
     {
         "label": "SessionLocal",
-        "importPath": "db.db_init",
-        "description": "db.db_init",
+        "importPath": "app.db.db_init",
+        "description": "app.db.db_init",
         "isExtraImport": true,
-        "detail": "db.db_init",
+        "detail": "app.db.db_init",
         "documentation": {}
     },
     {
         "label": "Payment",
-        "importPath": "db.db_models",
-        "description": "db.db_models",
+        "importPath": "app.db.db_models",
+        "description": "app.db.db_models",
         "isExtraImport": true,
-        "detail": "db.db_models",
+        "detail": "app.db.db_models",
         "documentation": {}
     },
     {
         "label": "Payment",
-        "importPath": "db.db_models",
-        "description": "db.db_models",
+        "importPath": "app.db.db_models",
+        "description": "app.db.db_models",
         "isExtraImport": true,
-        "detail": "db.db_models",
+        "detail": "app.db.db_models",
         "documentation": {}
     },
     {
         "label": "PaymentRequest",
-        "importPath": "request_model",
-        "description": "request_model",
+        "importPath": "app.request_model.request_models",
+        "description": "app.request_model.request_models",
         "isExtraImport": true,
-        "detail": "request_model",
+        "detail": "app.request_model.request_models",
+        "documentation": {}
+    },
+    {
+        "label": "PaymentRequest",
+        "importPath": "app.request_model.request_models",
+        "description": "app.request_model.request_models",
+        "isExtraImport": true,
+        "detail": "app.request_model.request_models",
         "documentation": {}
     },
     {
         "label": "get_stripe_instance",
-        "importPath": "stripe.stripe_init",
-        "description": "stripe.stripe_init",
+        "importPath": "app.stripe.stripe_init",
+        "description": "app.stripe.stripe_init",
         "isExtraImport": true,
-        "detail": "stripe.stripe_init",
+        "detail": "app.stripe.stripe_init",
         "documentation": {}
     },
     {
@@ -136,14 +144,6 @@
         "documentation": {}
     },
     {
-        "label": "Depends",
-        "importPath": "fastapi",
-        "description": "fastapi",
-        "isExtraImport": true,
-        "detail": "fastapi",
-        "documentation": {}
-    },
-    {
         "label": "APIRouter",
         "importPath": "fastapi",
         "description": "fastapi",
@@ -177,34 +177,26 @@
     },
     {
         "label": "create_payment_task",
-        "importPath": "celery.create_payment_task",
-        "description": "celery.create_payment_task",
+        "importPath": "app.celery_and_tasks.create_payment_task",
+        "description": "app.celery_and_tasks.create_payment_task",
         "isExtraImport": true,
-        "detail": "celery.create_payment_task",
-        "documentation": {}
-    },
-    {
-        "label": "PaymentRequest",
-        "importPath": "request_model.request_models",
-        "description": "request_model.request_models",
-        "isExtraImport": true,
-        "detail": "request_model.request_models",
+        "detail": "app.celery_and_tasks.create_payment_task",
         "documentation": {}
     },
     {
         "label": "process_successful_payment",
-        "importPath": "celery.process_successful_payment_task",
-        "description": "celery.process_successful_payment_task",
+        "importPath": "app.celery_and_tasks.process_successful_payment_task",
+        "description": "app.celery_and_tasks.process_successful_payment_task",
         "isExtraImport": true,
-        "detail": "celery.process_successful_payment_task",
+        "detail": "app.celery_and_tasks.process_successful_payment_task",
         "documentation": {}
     },
     {
         "label": "process_successful_payment",
-        "importPath": "celery.process_successful_payment_task",
-        "description": "celery.process_successful_payment_task",
+        "importPath": "app.celery_and_tasks.process_successful_payment_task",
+        "description": "app.celery_and_tasks.process_successful_payment_task",
         "isExtraImport": true,
-        "detail": "celery.process_successful_payment_task",
+        "detail": "app.celery_and_tasks.process_successful_payment_task",
         "documentation": {}
     },
     {
@@ -217,104 +209,30 @@
         "documentation": {}
     },
     {
-        "label": "MIMEMultipart",
-        "importPath": "email.mime.multipart",
-        "description": "email.mime.multipart",
-        "isExtraImport": true,
-        "detail": "email.mime.multipart",
-        "documentation": {}
-    },
-    {
-        "label": "MIMEText",
-        "importPath": "email.mime.text",
-        "description": "email.mime.text",
-        "isExtraImport": true,
-        "detail": "email.mime.text",
-        "documentation": {}
-    },
-    {
-        "label": "MIMEImage",
-        "importPath": "email.mime.image",
-        "description": "email.mime.image",
-        "isExtraImport": true,
-        "detail": "email.mime.image",
-        "documentation": {}
-    },
-    {
-        "label": "qrcode",
-        "kind": 6,
-        "isExtraImport": true,
-        "importPath": "qrcode",
-        "description": "qrcode",
-        "detail": "qrcode",
-        "documentation": {}
-    },
-    {
-        "label": "Image",
-        "importPath": "PIL",
-        "description": "PIL",
-        "isExtraImport": true,
-        "detail": "PIL",
-        "documentation": {}
-    },
-    {
-        "label": "BytesIO",
-        "importPath": "io",
-        "description": "io",
-        "isExtraImport": true,
-        "detail": "io",
-        "documentation": {}
-    },
-    {
-        "label": "requests",
-        "kind": 6,
-        "isExtraImport": true,
-        "importPath": "requests",
-        "description": "requests",
-        "detail": "requests",
-        "documentation": {}
-    },
-    {
-        "label": "router",
-        "importPath": "stripe.create_payment",
-        "description": "stripe.create_payment",
-        "isExtraImport": true,
-        "detail": "stripe.create_payment",
-        "documentation": {}
-    },
-    {
-        "label": "router",
-        "importPath": "stripe.webhook",
-        "description": "stripe.webhook",
-        "isExtraImport": true,
-        "detail": "stripe.webhook",
-        "documentation": {}
-    },
-    {
         "label": "celery",
         "kind": 5,
-        "importPath": "app.celery.celery_init",
-        "description": "app.celery.celery_init",
+        "importPath": "app.celery_and_tasks.celery_init",
+        "description": "app.celery_and_tasks.celery_init",
         "peekOfCode": "celery = Celery(\n    \"payment_tasks\",\n    broker=\"amqp://admin:mypass@rabbit:5672\",\n    backend=\"amqp://admin:mypass@rabbit:5672\",\n)",
-        "detail": "app.celery.celery_init",
+        "detail": "app.celery_and_tasks.celery_init",
         "documentation": {}
     },
     {
         "label": "create_payment_task",
         "kind": 2,
-        "importPath": "app.celery.create_payment_task",
-        "description": "app.celery.create_payment_task",
+        "importPath": "app.celery_and_tasks.create_payment_task",
+        "description": "app.celery_and_tasks.create_payment_task",
         "peekOfCode": "def create_payment_task(payment_request: PaymentRequest):\n    try:\n        stripe = get_stripe_instance()\n        session = stripe.checkout.Session.create(\n            payment_method_types=[\"card\"],\n            line_items=[\n                {\n                    \"price\": \"price_123\",\n                    \"quantity\": 1,\n                }",
-        "detail": "app.celery.create_payment_task",
+        "detail": "app.celery_and_tasks.create_payment_task",
         "documentation": {}
     },
     {
         "label": "process_successful_payment",
         "kind": 2,
-        "importPath": "app.celery.process_successful_payment_task",
-        "description": "app.celery.process_successful_payment_task",
+        "importPath": "app.celery_and_tasks.process_successful_payment_task",
+        "description": "app.celery_and_tasks.process_successful_payment_task",
         "peekOfCode": "def process_successful_payment(\n    payment_id,\n    #    email)\n):\n    try:\n        # Update the database to reflect the successful payment\n        db = SessionLocal()\n        db_payment = db.query(Payment).filter(Payment.id == payment_id).first()\n        if db_payment:\n            db_payment.status = \"succeeded\"",
-        "detail": "app.celery.process_successful_payment_task",
+        "detail": "app.celery_and_tasks.process_successful_payment_task",
         "documentation": {}
     },
     {
@@ -412,7 +330,7 @@
         "kind": 5,
         "importPath": "app.main",
         "description": "app.main",
-        "peekOfCode": "app = FastAPI()\napp.include_router(create_payment_router.route)\napp.include_router(webhook_router.route)\n# Define the send_email_with_qr function\n# def send_email_with_qr(recipient_email, payment_id):\n#     MAILGUN_DOMAIN = \"HELLO\"\n#     MAILGUN_API_KEY = \"API KEY\"\n#     try:\n#         # Generate QR code with the payment ID as the data\n#         qr = qrcode.QRCode(",
+        "peekOfCode": "app = FastAPI()\napp.include_router(create_payment_router)\napp.include_router(webhook_router)\n# Define the send_email_with_qr function\n# def send_email_with_qr(recipient_email, payment_id):\n#     MAILGUN_DOMAIN = \"HELLO\"\n#     MAILGUN_API_KEY = \"API KEY\"\n#     try:\n#         # Generate QR code with the payment ID as the data\n#         qr = qrcode.QRCode(",
         "detail": "app.main",
         "documentation": {}
     }
