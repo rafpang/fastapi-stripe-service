@@ -39,9 +39,6 @@ def create_payment(payment_request: PaymentRequest, stripe=Depends(get_stripe_ap
         db.refresh(payment)
         payment_id = payment.id
 
-        payment.status = "succeeded"
-        db.commit()
-
         process_successful_payment.apply_async(args=[payment_id, payment_request.email])
 
         return "Payment processing started asynchronously"
