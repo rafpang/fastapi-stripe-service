@@ -1,7 +1,7 @@
 from .request_models import PaymentRequest
-from .db_models import Payment
-from .celery_init import celery
-from .db_init import SessionLocal
+from .db.db_models import Payment
+from .celery.celery_init import celery
+from .db.db_init import SessionLocal
 
 from fastapi import FastAPI, HTTPException, Request
 
@@ -11,20 +11,13 @@ from email.mime.image import MIMEImage
 import qrcode
 from PIL import Image
 from io import BytesIO
-import stripe
+from .stripe.stripe_init import stripe
 import requests
 
 
 app = FastAPI()
 
 
-stripe.api_key = "your_stripe_secret_key"
-
-
-# Pydantic model for payment requests
-
-
-# Celery task for processing successful payments
 @celery.task
 def process_successful_payment(payment_id, email):
     try:
@@ -78,12 +71,10 @@ def send_email_with_qr(recipient_email, payment_id):
         """
         msg.attach(MIMEText(body, "plain"))
 
-        # Attach the QR code image to the email
         img = MIMEImage(qr_byteio.read())
         img.add_header("Content-Disposition", "attachment", filename="qrcode.png")
         msg.attach(img)
 
-        # Send the email using Mailgun
         response = requests.post(
             f"https://api.mailgun.net/v3/{MAILGUN_DOMAIN}/messages",
             auth=("api", MAILGUN_API_KEY),
@@ -103,12 +94,9 @@ def send_email_with_qr(recipient_email, payment_id):
         print("Email sending failed:", str(e))
 
 
-# Endpoint to create payments and initiate processing
 @app.post("/create-payment")
 def create_payment(payment_request: PaymentRequest):
     try:
-        # Implement the payment processing logic here
-        # For example, create a payment record in the database
         db = SessionLocal()
         payment = Payment(
             amount=payment_request.amount,
@@ -121,12 +109,9 @@ def create_payment(payment_request: PaymentRequest):
         db.refresh(payment)
         payment_id = payment.id
 
-        # Simulate a payment success (Replace with actual payment logic)
-        # In a real scenario, you would interact with Stripe or a payment gateway.
         payment.status = "succeeded"
         db.commit()
 
-        # Enqueue the Celery task to process the successful payment
         process_successful_payment.apply_async(args=[payment_id, payment_request.email])
 
         return "Payment processing started asynchronously"
@@ -164,5 +149,4 @@ async def stripe_webhook(request: Request):
 if __name__ == "__main__":
     import uvicorn
 
-    # Replace "main:app" with the name of your Python file and FastAPI instance
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
