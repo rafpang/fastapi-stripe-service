@@ -300,19 +300,19 @@
     {
         "label": "create_payment",
         "kind": 2,
-        "importPath": "app.stripe.create_payment_router",
-        "description": "app.stripe.create_payment_router",
+        "importPath": "app.stripe.payment_route",
+        "description": "app.stripe.payment_route",
         "peekOfCode": "def create_payment(\n    payment_request: PaymentRequest,\n):\n    try:\n        payment_task_response = run_stripe_checkout_session(payment_request)\n        payment_id = payment_task_response[\"paymentId\"]\n        process_successful_payment.apply_async(args=[payment_id, payment_request.email])\n        return \"Payment processing started asynchronously\"\n    except Exception as e:\n        raise HTTPException(status_code=400, detail=f\"Payment Error: {str(e)}\")",
-        "detail": "app.stripe.create_payment_router",
+        "detail": "app.stripe.payment_route",
         "documentation": {}
     },
     {
         "label": "router",
         "kind": 5,
-        "importPath": "app.stripe.create_payment_router",
-        "description": "app.stripe.create_payment_router",
+        "importPath": "app.stripe.payment_route",
+        "description": "app.stripe.payment_route",
         "peekOfCode": "router = APIRouter(prefix=\"/payment\")\n@router.post(\"/checkout\")\ndef create_payment(\n    payment_request: PaymentRequest,\n):\n    try:\n        payment_task_response = run_stripe_checkout_session(payment_request)\n        payment_id = payment_task_response[\"paymentId\"]\n        process_successful_payment.apply_async(args=[payment_id, payment_request.email])\n        return \"Payment processing started asynchronously\"",
-        "detail": "app.stripe.create_payment_router",
+        "detail": "app.stripe.payment_route",
         "documentation": {}
     },
     {
@@ -336,10 +336,10 @@
     {
         "label": "router",
         "kind": 5,
-        "importPath": "app.stripe.webhook_router",
-        "description": "app.stripe.webhook_router",
+        "importPath": "app.stripe.webhook_route",
+        "description": "app.stripe.webhook_route",
         "peekOfCode": "router = APIRouter(prefix=\"/webhook\")\n@router.post(\"/stripe-webhook\")\nasync def stripe_webhook(request: Request, stripe=Depends(get_stripe_instance)):\n    try:\n        event = await request.json()\n        webhook_secret = os.environ.get(\"STRIPE_WEBHOOK_SECRET\")\n        stripe_event = stripe.Webhook.construct_event(\n            payload=event, secret=webhook_secret\n        )\n        if stripe_event.type == \"payment_intent.succeeded\":",
-        "detail": "app.stripe.webhook_router",
+        "detail": "app.stripe.webhook_route",
         "documentation": {}
     },
     {
