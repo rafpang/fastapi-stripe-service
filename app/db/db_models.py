@@ -8,7 +8,7 @@ Base = declarative_base()
 class Payment(Base):
     __tablename__ = "payments"
     id = Column(Integer, primary_key=True, index=True)
-    amount = Column(Integer)
-    currency = Column(String)
+    payee = Column(String)
+    seat_details = Column(String)
     email = Column(String)
-    status = Column(String)
+    amount = Column(Integer)
