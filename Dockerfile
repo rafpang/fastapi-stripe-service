@@ -1,5 +1,5 @@
 
-FROM python:3.6.8
+FROM python:3.7-slim
 
 WORKDIR /code/app
 
