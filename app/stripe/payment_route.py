@@ -17,8 +17,8 @@ def create_payment(
 ):
     try:
         payment_task_response = run_stripe_checkout_session(payment_request)
-        payment_id = payment_task_response["paymentId"]
-        process_successful_payment.apply_async(args=[payment_id, payment_request.email])
-        return "Payment processing started asynchronously"
+        payment_id = payment_task_response["payment_id"]
+        # process_successful_payment.apply_async(args=[payment_id, payment_request.email])
+        return {"payment_id": payment_id, "status": "successful"}
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"Payment Error: {str(e)}")

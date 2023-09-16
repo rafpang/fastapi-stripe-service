@@ -293,7 +293,7 @@
         "kind": 6,
         "importPath": "app.request_model.request_models",
         "description": "app.request_model.request_models",
-        "peekOfCode": "class PaymentRequest(BaseModel):\n    amount: int\n    audience: str\n    currency: str\n    email: str",
+        "peekOfCode": "class PaymentRequest(BaseModel):\n    amount: int\n    price_id: str\n    quantity: int\n    audience: str\n    email: str",
         "detail": "app.request_model.request_models",
         "documentation": {}
     },
@@ -302,7 +302,7 @@
         "kind": 2,
         "importPath": "app.stripe.payment_route",
         "description": "app.stripe.payment_route",
-        "peekOfCode": "def create_payment(\n    payment_request: PaymentRequest,\n):\n    try:\n        payment_task_response = run_stripe_checkout_session(payment_request)\n        payment_id = payment_task_response[\"paymentId\"]\n        process_successful_payment.apply_async(args=[payment_id, payment_request.email])\n        return \"Payment processing started asynchronously\"\n    except Exception as e:\n        raise HTTPException(status_code=400, detail=f\"Payment Error: {str(e)}\")",
+        "peekOfCode": "def create_payment(\n    payment_request: PaymentRequest,\n):\n    try:\n        payment_task_response = run_stripe_checkout_session(payment_request)\n        payment_id = payment_task_response[\"payment_id\"]\n        # process_successful_payment.apply_async(args=[payment_id, payment_request.email])\n        return {\"payment_id\": payment_id, \"status\": \"successful\"}\n    except Exception as e:\n        raise HTTPException(status_code=400, detail=f\"Payment Error: {str(e)}\")",
         "detail": "app.stripe.payment_route",
         "documentation": {}
     },
@@ -311,7 +311,7 @@
         "kind": 5,
         "importPath": "app.stripe.payment_route",
         "description": "app.stripe.payment_route",
-        "peekOfCode": "router = APIRouter(prefix=\"/payment\")\n@router.post(\"/checkout\")\ndef create_payment(\n    payment_request: PaymentRequest,\n):\n    try:\n        payment_task_response = run_stripe_checkout_session(payment_request)\n        payment_id = payment_task_response[\"paymentId\"]\n        process_successful_payment.apply_async(args=[payment_id, payment_request.email])\n        return \"Payment processing started asynchronously\"",
+        "peekOfCode": "router = APIRouter(prefix=\"/payment\")\n@router.post(\"/checkout\")\ndef create_payment(\n    payment_request: PaymentRequest,\n):\n    try:\n        payment_task_response = run_stripe_checkout_session(payment_request)\n        payment_id = payment_task_response[\"payment_id\"]\n        # process_successful_payment.apply_async(args=[payment_id, payment_request.email])\n        return {\"payment_id\": payment_id, \"status\": \"successful\"}",
         "detail": "app.stripe.payment_route",
         "documentation": {}
     },
