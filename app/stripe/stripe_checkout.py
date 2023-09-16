@@ -1,11 +1,10 @@
 from app.db.db_init import SessionLocal
 from app.db.db_models import Payment
 from app.db.db_init import SessionLocal
-from app.request_model.request_models import PaymentRequest
 from app.stripe.stripe_init import get_stripe_instance
 
 
-def run_stripe_checkout_session(payment_request: PaymentRequest):
+def run_stripe_checkout_session(payment_request):
     try:
         stripe = get_stripe_instance()
         session = stripe.checkout.Session.create(

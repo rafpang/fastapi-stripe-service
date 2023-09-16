@@ -168,14 +168,6 @@
         "documentation": {}
     },
     {
-        "label": "PaymentRequest",
-        "importPath": "app.request_model.request_models",
-        "description": "app.request_model.request_models",
-        "isExtraImport": true,
-        "detail": "app.request_model.request_models",
-        "documentation": {}
-    },
-    {
         "label": "process_successful_payment",
         "importPath": "app.celery_and_tasks.process_successful_payment_task",
         "description": "app.celery_and_tasks.process_successful_payment_task",
@@ -328,7 +320,7 @@
         "kind": 2,
         "importPath": "app.stripe.stripe_checkout",
         "description": "app.stripe.stripe_checkout",
-        "peekOfCode": "def run_stripe_checkout_session(payment_request: PaymentRequest):\n    try:\n        stripe = get_stripe_instance()\n        session = stripe.checkout.Session.create(\n            payment_method_types=[\"card\", \"paynow\"],\n            line_items=[\n                {\n                    \"price\": \"price_123\",\n                    \"quantity\": 1,\n                }",
+        "peekOfCode": "def run_stripe_checkout_session(payment_request):\n    try:\n        stripe = get_stripe_instance()\n        session = stripe.checkout.Session.create(\n            payment_method_types=[\"card\", \"paynow\"],\n            line_items=[\n                {\n                    \"price\": \"price_123\",\n                    \"quantity\": 1,\n                }",
         "detail": "app.stripe.stripe_checkout",
         "documentation": {}
     },
