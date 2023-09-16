@@ -217,6 +217,14 @@
         "documentation": {}
     },
     {
+        "label": "load_dotenv",
+        "importPath": "dotenv",
+        "description": "dotenv",
+        "isExtraImport": true,
+        "detail": "dotenv",
+        "documentation": {}
+    },
+    {
         "label": "os",
         "kind": 6,
         "isExtraImport": true,
@@ -329,7 +337,7 @@
         "kind": 2,
         "importPath": "app.stripe.stripe_init",
         "description": "app.stripe.stripe_init",
-        "peekOfCode": "def get_stripe_instance():\n    stripe.api_key = \"your_stripe_secret_key\"\n    return stripe",
+        "peekOfCode": "def get_stripe_instance():\n    stripe.api_key = os.environ.get(\"STRIPE_SECRET_KEY\")\n    return stripe",
         "detail": "app.stripe.stripe_init",
         "documentation": {}
     },
