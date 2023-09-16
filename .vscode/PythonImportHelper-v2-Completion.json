@@ -320,7 +320,7 @@
         "kind": 2,
         "importPath": "app.stripe.stripe_checkout",
         "description": "app.stripe.stripe_checkout",
-        "peekOfCode": "def run_stripe_checkout_session(payment_request):\n    try:\n        stripe = get_stripe_instance()\n        session = stripe.checkout.Session.create(\n            payment_method_types=[\"card\", \"paynow\"],\n            line_items=[\n                {\n                    \"price\": \"price_123\",\n                    \"quantity\": 1,\n                }",
+        "peekOfCode": "def run_stripe_checkout_session(payment_request):\n    try:\n        stripe = get_stripe_instance()\n        price_id = payment_request[\"price_id\"]\n        quantity = payment_request[\"quantity\"]\n        session = stripe.checkout.Session.create(\n            payment_method_types=[\"card\", \"paynow\"],\n            line_items=[\n                {\n                    \"price\": price_id,",
         "detail": "app.stripe.stripe_checkout",
         "documentation": {}
     },

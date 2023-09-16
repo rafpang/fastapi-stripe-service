@@ -7,12 +7,14 @@ from app.stripe.stripe_init import get_stripe_instance
 def run_stripe_checkout_session(payment_request):
     try:
         stripe = get_stripe_instance()
+        price_id = payment_request["price_id"]
+        quantity = payment_request["quantity"]
         session = stripe.checkout.Session.create(
             payment_method_types=["card", "paynow"],
             line_items=[
                 {
-                    "price": "price_123",
-                    "quantity": 1,
+                    "price": price_id,
+                    "quantity": quantity,
                 }
             ],
             mode="payment",
