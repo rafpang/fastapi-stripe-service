@@ -11,7 +11,7 @@ from app.celery_and_tasks.process_successful_payment_task import (
 router = APIRouter(prefix="/payment")
 
 
-@router.post("/create-payment")
+@router.post("/checkout")
 def create_payment(
     payment_request: PaymentRequest,
 ):
