@@ -48,30 +48,6 @@
         "documentation": {}
     },
     {
-        "label": "PaymentRequest",
-        "importPath": "app.request_model.request_models",
-        "description": "app.request_model.request_models",
-        "isExtraImport": true,
-        "detail": "app.request_model.request_models",
-        "documentation": {}
-    },
-    {
-        "label": "PaymentRequest",
-        "importPath": "app.request_model.request_models",
-        "description": "app.request_model.request_models",
-        "isExtraImport": true,
-        "detail": "app.request_model.request_models",
-        "documentation": {}
-    },
-    {
-        "label": "get_stripe_instance",
-        "importPath": "app.stripe.stripe_init",
-        "description": "app.stripe.stripe_init",
-        "isExtraImport": true,
-        "detail": "app.stripe.stripe_init",
-        "documentation": {}
-    },
-    {
         "label": "create_engine",
         "importPath": "sqlalchemy",
         "description": "sqlalchemy",
@@ -176,11 +152,27 @@
         "documentation": {}
     },
     {
-        "label": "create_payment_task",
-        "importPath": "app.celery_and_tasks.create_payment_task",
-        "description": "app.celery_and_tasks.create_payment_task",
+        "label": "run_stripe_checkout_session",
+        "importPath": "app.stripe.stripe_checkout",
+        "description": "app.stripe.stripe_checkout",
         "isExtraImport": true,
-        "detail": "app.celery_and_tasks.create_payment_task",
+        "detail": "app.stripe.stripe_checkout",
+        "documentation": {}
+    },
+    {
+        "label": "PaymentRequest",
+        "importPath": "app.request_model.request_models",
+        "description": "app.request_model.request_models",
+        "isExtraImport": true,
+        "detail": "app.request_model.request_models",
+        "documentation": {}
+    },
+    {
+        "label": "PaymentRequest",
+        "importPath": "app.request_model.request_models",
+        "description": "app.request_model.request_models",
+        "isExtraImport": true,
+        "detail": "app.request_model.request_models",
         "documentation": {}
     },
     {
@@ -197,6 +189,14 @@
         "description": "app.celery_and_tasks.process_successful_payment_task",
         "isExtraImport": true,
         "detail": "app.celery_and_tasks.process_successful_payment_task",
+        "documentation": {}
+    },
+    {
+        "label": "get_stripe_instance",
+        "importPath": "app.stripe.stripe_init",
+        "description": "app.stripe.stripe_init",
+        "isExtraImport": true,
+        "detail": "app.stripe.stripe_init",
         "documentation": {}
     },
     {
@@ -240,15 +240,6 @@
         "description": "app.celery_and_tasks.celery_init",
         "peekOfCode": "celery = Celery(\n    \"payment_tasks\",\n    broker=\"amqp://admin:mypass@rabbit:5672\",\n    backend=\"amqp://admin:mypass@rabbit:5672\",\n)",
         "detail": "app.celery_and_tasks.celery_init",
-        "documentation": {}
-    },
-    {
-        "label": "create_payment_task",
-        "kind": 2,
-        "importPath": "app.celery_and_tasks.create_payment_task",
-        "description": "app.celery_and_tasks.create_payment_task",
-        "peekOfCode": "def create_payment_task(payment_request: PaymentRequest):\n    try:\n        stripe = get_stripe_instance()\n        session = stripe.checkout.Session.create(\n            payment_method_types=[\"card\", \"paynow\"],\n            line_items=[\n                {\n                    \"price\": \"price_123\",\n                    \"quantity\": 1,\n                }",
-        "detail": "app.celery_and_tasks.create_payment_task",
         "documentation": {}
     },
     {
@@ -319,7 +310,7 @@
         "kind": 2,
         "importPath": "app.stripe.create_payment",
         "description": "app.stripe.create_payment",
-        "peekOfCode": "def create_payment(\n    payment_request: PaymentRequest,\n):\n    try:\n        payment_task_response = create_payment_task.apply_async(args=[payment_request])\n        payment_id = payment_task_response[\"paymentId\"]\n        process_successful_payment.apply_async(args=[payment_id, payment_request.email])\n        return \"Payment processing started asynchronously\"\n    except Exception as e:\n        raise HTTPException(status_code=400, detail=f\"Payment Error: {str(e)}\")",
+        "peekOfCode": "def create_payment(\n    payment_request: PaymentRequest,\n):\n    try:\n        payment_task_response = run_stripe_checkout_session(payment_request)\n        payment_id = payment_task_response[\"paymentId\"]\n        process_successful_payment.apply_async(args=[payment_id, payment_request.email])\n        return \"Payment processing started asynchronously\"\n    except Exception as e:\n        raise HTTPException(status_code=400, detail=f\"Payment Error: {str(e)}\")",
         "detail": "app.stripe.create_payment",
         "documentation": {}
     },
@@ -328,8 +319,17 @@
         "kind": 5,
         "importPath": "app.stripe.create_payment",
         "description": "app.stripe.create_payment",
-        "peekOfCode": "router = APIRouter(prefix=\"/payment\")\n@router.post(\"/create-payment\")\ndef create_payment(\n    payment_request: PaymentRequest,\n):\n    try:\n        payment_task_response = create_payment_task.apply_async(args=[payment_request])\n        payment_id = payment_task_response[\"paymentId\"]\n        process_successful_payment.apply_async(args=[payment_id, payment_request.email])\n        return \"Payment processing started asynchronously\"",
+        "peekOfCode": "router = APIRouter(prefix=\"/payment\")\n@router.post(\"/create-payment\")\ndef create_payment(\n    payment_request: PaymentRequest,\n):\n    try:\n        payment_task_response = run_stripe_checkout_session(payment_request)\n        payment_id = payment_task_response[\"paymentId\"]\n        process_successful_payment.apply_async(args=[payment_id, payment_request.email])\n        return \"Payment processing started asynchronously\"",
         "detail": "app.stripe.create_payment",
+        "documentation": {}
+    },
+    {
+        "label": "run_stripe_checkout_session",
+        "kind": 2,
+        "importPath": "app.stripe.stripe_checkout",
+        "description": "app.stripe.stripe_checkout",
+        "peekOfCode": "def run_stripe_checkout_session(payment_request: PaymentRequest):\n    try:\n        stripe = get_stripe_instance()\n        session = stripe.checkout.Session.create(\n            payment_method_types=[\"card\", \"paynow\"],\n            line_items=[\n                {\n                    \"price\": \"price_123\",\n                    \"quantity\": 1,\n                }",
+        "detail": "app.stripe.stripe_checkout",
         "documentation": {}
     },
     {
