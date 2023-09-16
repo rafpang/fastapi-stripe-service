@@ -275,7 +275,7 @@
         "kind": 6,
         "importPath": "app.db.db_models",
         "description": "app.db.db_models",
-        "peekOfCode": "class Payment(Base):\n    __tablename__ = \"payments\"\n    id = Column(Integer, primary_key=True, index=True)\n    payee = Column(String)\n    seat_details = Column(String)\n    email = Column(String)\n    amount = Column(Integer)",
+        "peekOfCode": "class Payment(Base):\n    __tablename__ = \"payments\"\n    id = Column(String, primary_key=True, index=True)\n    payee = Column(String)\n    num_tickets = Column(Integer)\n    seat_details = Column(String)\n    email = Column(String)\n    amount = Column(Integer)",
         "detail": "app.db.db_models",
         "documentation": {}
     },
@@ -284,7 +284,7 @@
         "kind": 5,
         "importPath": "app.db.db_models",
         "description": "app.db.db_models",
-        "peekOfCode": "Base = declarative_base()\nclass Payment(Base):\n    __tablename__ = \"payments\"\n    id = Column(Integer, primary_key=True, index=True)\n    payee = Column(String)\n    seat_details = Column(String)\n    email = Column(String)\n    amount = Column(Integer)",
+        "peekOfCode": "Base = declarative_base()\nclass Payment(Base):\n    __tablename__ = \"payments\"\n    id = Column(String, primary_key=True, index=True)\n    payee = Column(String)\n    num_tickets = Column(Integer)\n    seat_details = Column(String)\n    email = Column(String)\n    amount = Column(Integer)",
         "detail": "app.db.db_models",
         "documentation": {}
     },
@@ -347,7 +347,7 @@
         "kind": 5,
         "importPath": "app.main",
         "description": "app.main",
-        "peekOfCode": "app = FastAPI()\napp.include_router(create_payment_router)\napp.include_router(webhook_router)\n# Define the send_email_with_qr function\n# def send_email_with_qr(recipient_email, payment_id):\n#     MAILGUN_DOMAIN = \"HELLO\"\n#     MAILGUN_API_KEY = \"API KEY\"\n#     try:\n#         # Generate QR code with the payment ID as the data\n#         qr = qrcode.QRCode(",
+        "peekOfCode": "app = FastAPI()\napp.include_router(payment_router)\napp.include_router(webhook_router)\n# Define the send_email_with_qr functioncvff\n# def send_email_with_qr(recipient_email, payment_id):\n#     MAILGUN_DOMAIN = \"HELLO\"\n#     MAILGUN_API_KEY = \"API KEY\"\n#     try:\n#         # Generate QR code with the payment ID as the data\n#         qr = qrcode.QRCode(",
         "detail": "app.main",
         "documentation": {}
     }

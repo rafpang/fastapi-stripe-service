@@ -8,15 +8,19 @@ from fastapi import FastAPI
 # from io import BytesIO
 
 # import requests
+from .db.db_init import engine
+from .db.db_models import Base
+from .stripe.payment_route import router as payment_router
+from .stripe.webhook_route import router as webhook_router
 
-from .stripe.create_payment import router as create_payment_router
-from .stripe.webhook import router as webhook_router
+Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
-app.include_router(create_payment_router)
+
+app.include_router(payment_router)
 app.include_router(webhook_router)
 
-# Define the send_email_with_qr function
+# Define the send_email_with_qr functioncvff
 # def send_email_with_qr(recipient_email, payment_id):
 #     MAILGUN_DOMAIN = "HELLO"
 #     MAILGUN_API_KEY = "API KEY"
