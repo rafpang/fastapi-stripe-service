@@ -6,6 +6,7 @@ services:
       - "8000:8000"
     depends_on:
       - rabbit
+      - stripecli
   celery-worker:
     build: .
     command:
@@ -19,7 +20,13 @@ services:
     depends_on:
       - fastapi_app
       - rabbit
-
+      - stripecli
+  stripecli:
+    image: stripe/stripe-cli
+    container_name: stripe-cli
+    command: "listen --api-key ${STRIPE_API_KEY} --forward-to web:8000/payment/webhook/"
+    env_file:
+      - stripe_cli.env
   rabbit:
     hostname: rabbit
     image: "rabbitmq:3-management"
