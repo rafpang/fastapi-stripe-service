@@ -24,7 +24,7 @@ services:
   stripe_cli:
     image: stripe/stripe-cli
     container_name: stripe-cli
-    command: "listen --api-key ${STRIPE_API_KEY} --forward-to web:8000/payment/webhook/"
+    command: "listen --api-key ${STRIPE_API_KEY} --forward-to 0.0.0.0:8000/webhook/stripe-webhook/"
     env_file:
       - stripe_cli.env
   rabbit:
