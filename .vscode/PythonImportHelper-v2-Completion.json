@@ -209,6 +209,23 @@
         "documentation": {}
     },
     {
+        "label": "load_dotenv",
+        "importPath": "dotenv",
+        "description": "dotenv",
+        "isExtraImport": true,
+        "detail": "dotenv",
+        "documentation": {}
+    },
+    {
+        "label": "os",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "os",
+        "description": "os",
+        "detail": "os",
+        "documentation": {}
+    },
+    {
         "label": "celery",
         "kind": 5,
         "importPath": "app.celery_and_tasks.celery_init",
@@ -321,7 +338,7 @@
         "kind": 5,
         "importPath": "app.stripe.webhook",
         "description": "app.stripe.webhook",
-        "peekOfCode": "router = APIRouter(prefix=\"/webhook\")\n@router.post(\"/stripe-webhook\")\nasync def stripe_webhook(request: Request, stripe=Depends(get_stripe_instance)):\n    try:\n        event = await request.json()\n        webhook_secret = \"your_webhook_secret_key\"\n        stripe_event = stripe.Webhook.construct_event(\n            payload=event, secret=webhook_secret\n        )\n        if stripe_event.type == \"payment_intent.succeeded\":",
+        "peekOfCode": "router = APIRouter(prefix=\"/webhook\")\n@router.post(\"/stripe-webhook\")\nasync def stripe_webhook(request: Request, stripe=Depends(get_stripe_instance)):\n    try:\n        event = await request.json()\n        webhook_secret = os.environ.get(\"STRIPE_WEBHOOK_SECRET\")\n        stripe_event = stripe.Webhook.construct_event(\n            payload=event, secret=webhook_secret\n        )\n        if stripe_event.type == \"payment_intent.succeeded\":",
         "detail": "app.stripe.webhook",
         "documentation": {}
     },

@@ -4,7 +4,10 @@ from app.celery_and_tasks.process_successful_payment_task import (
 from .stripe_init import get_stripe_instance
 
 from fastapi import APIRouter, Request, Depends
+from dotenv import load_dotenv
+import os
 
+load_dotenv()
 
 router = APIRouter(prefix="/webhook")
 
@@ -13,7 +16,7 @@ router = APIRouter(prefix="/webhook")
 async def stripe_webhook(request: Request, stripe=Depends(get_stripe_instance)):
     try:
         event = await request.json()
-        webhook_secret = "your_webhook_secret_key"
+        webhook_secret = os.environ.get("STRIPE_WEBHOOK_SECRET")
 
         stripe_event = stripe.Webhook.construct_event(
             payload=event, secret=webhook_secret

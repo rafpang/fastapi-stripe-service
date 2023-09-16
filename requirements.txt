@@ -10,4 +10,4 @@ starlette
 stripe==6.5.0
 uvicorn
 pillow
-
+python-dotenv
