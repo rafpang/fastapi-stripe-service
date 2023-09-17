@@ -35,7 +35,8 @@ def create_payment(
         return {
             "payment_id": price_id,
             "status": "successful",
-            "payment_response": payment_task_response,
+            "session_url": payment_task_response["session_url"],
+            "session_id": payment_task_response["session_id"],
         }
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"Payment Error: {str(e)}")

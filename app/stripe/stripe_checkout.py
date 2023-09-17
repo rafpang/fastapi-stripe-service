@@ -61,6 +61,6 @@ def run_stripe_checkout_session(
         # db.refresh(payment)
         # payment_id = payment.id
 
-        return {"session_id": session.id, "payer": payer}
+        return {"session_id": session.id, "session_url": session.url, "payer": payer}
     except Exception as e:
         return {"error": str(e)}
