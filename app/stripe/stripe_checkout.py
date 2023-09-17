@@ -4,21 +4,7 @@ from app.db.db_init import SessionLocal
 from app.stripe.stripe_init import get_stripe_instance
 from app.request_model.request_models import PaymentRequest
 
-#  amount: int
-#     price_id: str
-#     quantity: int
-#     audience: str
-#     email: str
 
-
-# class PaymentRequest(BaseModel):
-# amount: int
-# price_id: str
-# quantity: int
-# payer: str
-# email: str
-# seat_loaction: str
-# show_time: str
 def run_stripe_checkout_session(
     price_id: str,
     quantity: int,
