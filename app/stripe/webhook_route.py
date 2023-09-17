@@ -10,6 +10,13 @@ import os
 load_dotenv()
 
 router = APIRouter(prefix="/webhook")
+# metadata={
+#                 "payer": payer,
+#                 "email": email,
+#                 "quantity": quantity,
+#                 "seat_location": seat_location,
+#                 "show_time": show_time,
+#             },
 
 
 @router.post("/stripe-webhook")
@@ -22,12 +29,25 @@ async def stripe_webhook(request: Request, stripe=Depends(get_stripe_instance)):
             payload=event, secret=webhook_secret
         )
 
-        if stripe_event.type == "payment_intent.succeeded":
-            payment_intent = stripe_event.data.object
-            payment_id = payment_intent.metadata.get("payment_id")
-            email = payment_intent.metadata.get("email")
+        #   metadata={
+        #         "payer": payer,
+        #         "email": email,
+        #         "quantity": quantity,
+        #         "seat_location": seat_location,
+        #         "show_time": show_time,
+        #     },
 
-        process_successful_payment.apply_async(args=[payment_id, email])
+        if stripe_event.type == "payment_intent.succeeded":
+            event_id = stripe_event.data.object.id
+            payment_intent_metadata = stripe_event.data.object.metadata
+            payee = payment_intent_metadata.get("payer")
+            email = payment_intent_metadata.get("email")
+            quantity = payment_intent_metadata.get("quantity")
+            seat_location = payment_intent_metadata.get("seat_location")
+            show_time = payment_intent_metadata.get("show_time")
+            print(event_id, payee, email, quantity, seat_location, show_time)
+
+        # process_successful_payment.apply_async(args=[payment_id, email])
 
         return "Webhook processed successfully"
     except Exception as e:

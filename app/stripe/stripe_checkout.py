@@ -2,13 +2,34 @@ from app.db.db_init import SessionLocal
 from app.db.db_models import Payment
 from app.db.db_init import SessionLocal
 from app.stripe.stripe_init import get_stripe_instance
+from app.request_model.request_models import PaymentRequest
+
+#  amount: int
+#     price_id: str
+#     quantity: int
+#     audience: str
+#     email: str
 
 
-def run_stripe_checkout_session(payment_request):
+# class PaymentRequest(BaseModel):
+# amount: int
+# price_id: str
+# quantity: int
+# payer: str
+# email: str
+# seat_loaction: str
+# show_time: str
+def run_stripe_checkout_session(
+    price_id: str,
+    quantity: int,
+    email: str,
+    payer: str,
+    seat_location: str,
+    show_time: str,
+):
     try:
         stripe = get_stripe_instance()
-        price_id = payment_request["price_id"]
-        quantity = payment_request["quantity"]
+
         session = stripe.checkout.Session.create(
             payment_method_types=["card", "paynow"],
             line_items=[
@@ -20,19 +41,26 @@ def run_stripe_checkout_session(payment_request):
             mode="payment",
             success_url="http://localhost:3000/success",
             cancel_url="http://localhost:3000/cancel",
+            metadata={
+                "payer": payer,
+                "email": email,
+                "quantity": quantity,
+                "seat_location": seat_location,
+                "show_time": show_time,
+            },
         )
-        db = SessionLocal()
-        payment = Payment(
-            amount=payment_request.amount,
-            currency=payment_request.currency,
-            email=payment_request.email,
-            status="pending",
-        )
-        db.add(payment)
-        db.commit()
-        db.refresh(payment)
-        payment_id = payment.id
+        # db = SessionLocal()
+        # payment = Payment(
+        #     amount=payment_request.amount,
+        #     currency=payment_request.currency,
+        #     email=payment_request.email,
+        #     status="pending",
+        # )
+        # db.add(payment)
+        # db.commit()
+        # db.refresh(payment)
+        # payment_id = payment.id
 
-        return {"session_id": session.id, "payment_id": payment_id}
+        return {"session_id": session.id, "payer": payer}
     except Exception as e:
         return {"error": str(e)}

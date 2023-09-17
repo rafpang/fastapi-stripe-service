@@ -120,6 +120,14 @@
         "documentation": {}
     },
     {
+        "label": "Body",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
         "label": "APIRouter",
         "importPath": "fastapi",
         "description": "fastapi",
@@ -157,6 +165,14 @@
         "description": "app.stripe.stripe_checkout",
         "isExtraImport": true,
         "detail": "app.stripe.stripe_checkout",
+        "documentation": {}
+    },
+    {
+        "label": "PaymentRequest",
+        "importPath": "app.request_model.request_models",
+        "description": "app.request_model.request_models",
+        "isExtraImport": true,
+        "detail": "app.request_model.request_models",
         "documentation": {}
     },
     {
@@ -223,6 +239,14 @@
         "importPath": "os",
         "description": "os",
         "detail": "os",
+        "documentation": {}
+    },
+    {
+        "label": "CORSMiddleware",
+        "importPath": "fastapi.middleware.cors",
+        "description": "fastapi.middleware.cors",
+        "isExtraImport": true,
+        "detail": "fastapi.middleware.cors",
         "documentation": {}
     },
     {
@@ -293,7 +317,7 @@
         "kind": 6,
         "importPath": "app.request_model.request_models",
         "description": "app.request_model.request_models",
-        "peekOfCode": "class PaymentRequest(BaseModel):\n    amount: int\n    price_id: str\n    quantity: int\n    audience: str\n    email: str",
+        "peekOfCode": "class PaymentRequest(BaseModel):\n    # amount: int\n    price_id: str\n    quantity: int\n    payer: str\n    email: str\n    seat_location: str\n    show_time: str",
         "detail": "app.request_model.request_models",
         "documentation": {}
     },
@@ -302,7 +326,7 @@
         "kind": 2,
         "importPath": "app.stripe.payment_route",
         "description": "app.stripe.payment_route",
-        "peekOfCode": "def create_payment(\n    payment_request: PaymentRequest,\n):\n    try:\n        payment_task_response = run_stripe_checkout_session(payment_request)\n        payment_id = payment_task_response[\"payment_id\"]\n        # process_successful_payment.apply_async(args=[payment_id, payment_request.email])\n        return {\"payment_id\": payment_id, \"status\": \"successful\"}\n    except Exception as e:\n        raise HTTPException(status_code=400, detail=f\"Payment Error: {str(e)}\")",
+        "peekOfCode": "def create_payment(\n    payment_request: PaymentRequest,\n):\n    try:\n        price_id = payment_request.price_id\n        quantity = payment_request.quantity\n        email = payment_request.email\n        payer = payment_request.payer\n        seat_location = payment_request.seat_location\n        show_time = payment_request.show_time",
         "detail": "app.stripe.payment_route",
         "documentation": {}
     },
@@ -311,7 +335,7 @@
         "kind": 5,
         "importPath": "app.stripe.payment_route",
         "description": "app.stripe.payment_route",
-        "peekOfCode": "router = APIRouter(prefix=\"/payment\")\n@router.post(\"/checkout\")\ndef create_payment(\n    payment_request: PaymentRequest,\n):\n    try:\n        payment_task_response = run_stripe_checkout_session(payment_request)\n        payment_id = payment_task_response[\"payment_id\"]\n        # process_successful_payment.apply_async(args=[payment_id, payment_request.email])\n        return {\"payment_id\": payment_id, \"status\": \"successful\"}",
+        "peekOfCode": "router = APIRouter(prefix=\"/payment\")\n@router.post(\"/checkout\")\ndef create_payment(\n    payment_request: PaymentRequest,\n):\n    try:\n        price_id = payment_request.price_id\n        quantity = payment_request.quantity\n        email = payment_request.email\n        payer = payment_request.payer",
         "detail": "app.stripe.payment_route",
         "documentation": {}
     },
@@ -320,7 +344,7 @@
         "kind": 2,
         "importPath": "app.stripe.stripe_checkout",
         "description": "app.stripe.stripe_checkout",
-        "peekOfCode": "def run_stripe_checkout_session(payment_request):\n    try:\n        stripe = get_stripe_instance()\n        price_id = payment_request[\"price_id\"]\n        quantity = payment_request[\"quantity\"]\n        session = stripe.checkout.Session.create(\n            payment_method_types=[\"card\", \"paynow\"],\n            line_items=[\n                {\n                    \"price\": price_id,",
+        "peekOfCode": "def run_stripe_checkout_session(\n    price_id: str,\n    quantity: int,\n    email: str,\n    payer: str,\n    seat_location: str,\n    show_time: str,\n):\n    try:\n        stripe = get_stripe_instance()",
         "detail": "app.stripe.stripe_checkout",
         "documentation": {}
     },
@@ -338,7 +362,7 @@
         "kind": 5,
         "importPath": "app.stripe.webhook_route",
         "description": "app.stripe.webhook_route",
-        "peekOfCode": "router = APIRouter(prefix=\"/webhook\")\n@router.post(\"/stripe-webhook\")\nasync def stripe_webhook(request: Request, stripe=Depends(get_stripe_instance)):\n    try:\n        event = await request.json()\n        webhook_secret = os.environ.get(\"STRIPE_WEBHOOK_SECRET\")\n        stripe_event = stripe.Webhook.construct_event(\n            payload=event, secret=webhook_secret\n        )\n        if stripe_event.type == \"payment_intent.succeeded\":",
+        "peekOfCode": "router = APIRouter(prefix=\"/webhook\")\n# metadata={\n#                 \"payer\": payer,\n#                 \"email\": email,\n#                 \"quantity\": quantity,\n#                 \"seat_location\": seat_location,\n#                 \"show_time\": show_time,\n#             },\n@router.post(\"/stripe-webhook\")\nasync def stripe_webhook(request: Request, stripe=Depends(get_stripe_instance)):",
         "detail": "app.stripe.webhook_route",
         "documentation": {}
     },
@@ -347,7 +371,16 @@
         "kind": 5,
         "importPath": "app.main",
         "description": "app.main",
-        "peekOfCode": "app = FastAPI()\napp.include_router(payment_router)\napp.include_router(webhook_router)\n# Define the send_email_with_qr functioncvff\n# def send_email_with_qr(recipient_email, payment_id):\n#     MAILGUN_DOMAIN = \"HELLO\"\n#     MAILGUN_API_KEY = \"API KEY\"\n#     try:\n#         # Generate QR code with the payment ID as the data\n#         qr = qrcode.QRCode(",
+        "peekOfCode": "app = FastAPI()\norigins = [\"*\"]\napp.add_middleware(\n    CORSMiddleware,\n    allow_origins=origins,\n    allow_credentials=True,\n    allow_methods=[\"*\"],\n    allow_headers=[\"*\"],\n)\napp.include_router(payment_router)",
+        "detail": "app.main",
+        "documentation": {}
+    },
+    {
+        "label": "origins",
+        "kind": 5,
+        "importPath": "app.main",
+        "description": "app.main",
+        "peekOfCode": "origins = [\"*\"]\napp.add_middleware(\n    CORSMiddleware,\n    allow_origins=origins,\n    allow_credentials=True,\n    allow_methods=[\"*\"],\n    allow_headers=[\"*\"],\n)\napp.include_router(payment_router)\napp.include_router(webhook_router)",
         "detail": "app.main",
         "documentation": {}
     }
